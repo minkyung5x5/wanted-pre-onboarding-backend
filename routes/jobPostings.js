@@ -3,6 +3,7 @@ const JobPosting = require('../models/JobPosting');
 
 const router = express.Router();
 
+// 1. 채용공고를 등록합니다.
 router.post('/', async (req, res) => {
   try {
     const { company_id, position, reward, description, tech_stack } = req.body;
@@ -22,6 +23,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// 2. 채용공고를 수정합니다.
 router.patch('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -47,6 +49,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+// 3. 채용공고를 삭제합니다.
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -66,6 +69,8 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// 4. 채용공고 목록을 가져옵니다.
+// 4-1. 사용자는 채용공고 목록을 확인할 수 있습니다.
 router.get('/', async (req, res) => {
   try {
     const jobPostings = await JobPosting.findAll();
