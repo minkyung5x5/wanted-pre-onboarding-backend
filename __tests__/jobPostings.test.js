@@ -1,27 +1,26 @@
 const TESTPORT = 3001;
 const request = require('supertest');
 const startServer = require('../index');
-const db = require('../db');
+const sequelize = require('../db');
+const JobPosting = require('../models/JobPosting');
 
-jest.mock('../db');
+jest.mock('../models/JobPosting');
 
 describe('Job Postings API', () => {
   let server;
 
-  beforeAll(() => {
-    server = startServer(TESTPORT);
+  beforeAll(async () => {
+    server = await startServer(TESTPORT);
   });
 
-  afterAll(() => {
-    server.close();
-    db.end();
+  afterAll(async () => {
+    await server.close();
+    await sequelize.close();
   });
 
   test('POST /job-postings should create a new job posting', async () => {
-    const mockResult = { insertId: 1 };
-    db.query.mockImplementation((query, values, callback) => {
-      callback(null, mockResult);
-    });
+    const mockJobPosting = { id: 1 };
+    JobPosting.create.mockResolvedValue(mockJobPosting);
 
     const response = await request(server)
       .post('/job-postings')
