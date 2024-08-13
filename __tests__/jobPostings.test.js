@@ -28,6 +28,7 @@ describe('Job Postings API', () => {
     await sequelize.close();
   });
 
+  // 1. 채용공고를 등록합니다.
   test('POST /job-postings should create a new job posting', async () => {
     const response = await request(server)
       .post('/job-postings')
@@ -45,6 +46,7 @@ describe('Job Postings API', () => {
     expect(response.body.id).toBe(1);
   });
 
+// 2. 채용공고를 수정합니다.
   test('PATCH /job-postings/:id should update an existing job posting with new reward, description', async () => {
     await JobPosting.create({
       company_id: 1,
@@ -83,6 +85,7 @@ describe('Job Postings API', () => {
     expect(response.body.message).toBe('채용공고가 성공적으로 수정되었습니다.');
   });
 
+  // 3. 채용공고를 삭제합니다.
   test('DELETE /job-postings/:id should delete an existing job posting', async () => {
     const response = await request(server)
       .delete('/job-postings/1')
@@ -101,6 +104,8 @@ describe('Job Postings API', () => {
     expect(response.body.error).toBe('해당 채용공고를 찾을 수 없습니다.');
   });
   
+  // 4. 채용공고 목록을 가져옵니다.
+  // 4-1. 사용자는 채용공고 목록을 확인할 수 있습니다.
   test('GET /job-postings should return a list of job postings', async () => {
     await initializeDatabase();
     await JobPosting.create({
@@ -144,4 +149,31 @@ describe('Job Postings API', () => {
       ])
     );
   });
+
+  // 5. 채용 상세 페이지를 가져옵니다.
+  test('GET /job-postings/:id should return job posting details', async () => {
+    await initializeDatabase();
+    await JobPosting.bulkCreate([
+      { id: 1, company_id: 1, position: '백엔드 주니어 개발자', reward: 1000000, tech_stack: 'Python', description: '원티드랩에서 백엔드 주니어 개발자를 채용합니다.' },
+      { id: 2, company_id: 1, position: '프론트엔드 주니어 개발자', reward: 1200000, tech_stack: 'JavaScript', description: '원티드랩에서 프론트엔드 주니어 개발자를 채용합니다.' },
+      { id: 3, company_id: 2, position: '백엔드 시니어 개발자', reward: 2000000, tech_stack: 'Java', description: '네이버에서 백엔드 시니어 개발자를 채용합니다.' }
+    ]);
+
+    const response = await request(server).get('/job-postings/1');
+    
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      id: 1,
+      company_name: '원티드랩',
+      company_country: '한국',
+      company_location: '서울',
+      position: '백엔드 주니어 개발자',
+      reward: 1000000,
+      tech_stack: 'Python',
+      description: '원티드랩에서 백엔드 주니어 개발자를 채용합니다.',
+      company_jobPostings: [2],
+    });
+  });
+
+
 });

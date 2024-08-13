@@ -13,7 +13,7 @@ const JobPosting = sequelize.define('JobPosting', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'companies',
+      model: Company,
       key: 'id',
     },
   },
