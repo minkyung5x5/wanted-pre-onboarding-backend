@@ -26,7 +26,7 @@
 1. ```$ npm test```
 #### cURL 테스트
 1. ```$ npm test```
-2. 
+2. cURL 코드로 테스트
 
 ## DB
 #### 1. 'job_postings' TABLE
@@ -45,10 +45,12 @@ CREATE TABLE `job_postings` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 ```
 #### 2. 'companies' TABLE
-``` CREATE TABLE `companies` (
+```
+CREATE TABLE `companies` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
     `country` varchar(100) NOT NULL,
     `location` varchar(100) NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ```
+) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+```
