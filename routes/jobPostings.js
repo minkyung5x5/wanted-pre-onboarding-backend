@@ -47,6 +47,36 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const jobPosting = await JobPosting.findByPk(id);
+
+    if (!jobPosting) {
+      return res.status(404).json({ error: '해당 채용공고를 찾을 수 없습니다.' });
+    }
+
+    await jobPosting.destroy();
+
+    res.status(200).json({ message: '채용공고가 성공적으로 삭제되었습니다.' });
+  } catch (err) {
+    console.error('데이터 삭제 오류:', err);
+    res.status(500).json({ error: '데이터 삭제 중 오류가 발생했습니다.' });
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const jobPostings = await JobPosting.findAll();
+
+    res.status(200).json(jobPostings);
+  } catch (err) {
+    console.error('채용공고 목록 가져오기 오류:', err);
+    res.status(500).json({ error: '채용공고 목록을 가져오는 중 오류가 발생했습니다.' });
+  }
+});
+
 router.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
