@@ -52,10 +52,12 @@ CREATE TABLE `companies` (
 
 ## 테스트 방법
 ### Jest, Supertest 기반 유닛테스트
-1. ```$ npm test```
+1. ```$ npm install```
+2. ```$ npm test```
 ### cURL 테스트
-1. ```$ npm test```
-2. cURL 코드로 테스트
+1. ```$ npm install```
+2. ```$ npm start```
+3. cURL 코드로 테스트
 cURL을 사용하여 `Job Postings API`의 각 엔드포인트를 테스트할 수 있는 명령어를 작성해드리겠습니다. 각 명령어는 위에 제공된 테스트 케이스와 대응됩니다.
 
     2-1. 채용공고를 등록합니다 (POST /job-postings)
