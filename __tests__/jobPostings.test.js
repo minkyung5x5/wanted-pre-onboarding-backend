@@ -37,4 +37,53 @@ describe('Job Postings API', () => {
     expect(response.body.message).toBe('채용공고가 성공적으로 등록되었습니다.');
     expect(response.body.id).toBe(1);
   });
+
+  test('PATCH /job-postings/:id should update an existing job posting', async () => {
+    const mockJobPosting = { id: 1, update: jest.fn() };
+    JobPosting.findByPk.mockResolvedValue(mockJobPosting);
+  
+    const response = await request(server)
+      .patch('/job-postings/1')
+      .send({
+        position: '백엔드 주니어 개발자',
+        reward: 1500000,
+        description: "원티드랩에서 백엔드 주니어 개발자를 '적극' 채용합니다. 자격요건은..",
+        tech_stack: 'Python'
+      })
+      .set('Accept', 'application/json');
+  
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('채용공고가 성공적으로 수정되었습니다.');
+    expect(mockJobPosting.update).toHaveBeenCalledWith({
+      position: '백엔드 주니어 개발자',
+      reward: 1500000,
+      description: "원티드랩에서 백엔드 주니어 개발자를 '적극' 채용합니다. 자격요건은..",
+      tech_stack: 'Python'
+    });
+  });
+
+  test('PATCH /job-postings/:id should update job posting with new tech stack', async () => {
+    const mockJobPosting = { id: 1, update: jest.fn() };
+    JobPosting.findByPk.mockResolvedValue(mockJobPosting);
+
+    const response = await request(server)
+      .patch('/job-postings/1')
+      .send({
+        position: '백엔드 주니어 개발자',
+        reward: 1000000,
+        description: "원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
+        tech_stack: 'Django'
+      })
+      .set('Accept', 'application/json');
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('채용공고가 성공적으로 수정되었습니다.');
+    expect(mockJobPosting.update).toHaveBeenCalledWith({
+      position: '백엔드 주니어 개발자',
+      reward: 1000000,
+      description: "원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
+      tech_stack: 'Django'
+    });
+  });
+  
 });
