@@ -1,5 +1,6 @@
 const express = require('express');
 const JobPosting = require('../models/JobPosting');
+const Company = require('../models/Company');
 
 const router = express.Router();
 
@@ -73,9 +74,28 @@ router.delete('/:id', async (req, res) => {
 // 4-1. 사용자는 채용공고 목록을 확인할 수 있습니다.
 router.get('/', async (req, res) => {
   try {
-    const jobPostings = await JobPosting.findAll();
+    const jobPostings = await JobPosting.findAll({
+      attributes: ['id', 'position', 'reward', 'tech_stack'],
+      include: [
+        {
+          model: Company,
+          as: 'company',
+          attributes: ['name', 'country', 'location'],
+        },
+      ],
+    });
 
-    res.status(200).json(jobPostings);
+    const result = jobPostings.map(job => ({
+      id: job.id,
+      company_name: job.company.name,
+      company_country: job.company.country,  
+      company_location: job.company.location,
+      position: job.position,
+      reward: job.reward,
+      tech_stack: job.tech_stack,
+    }));
+
+    res.status(200).json(result);
   } catch (err) {
     console.error('채용공고 목록 가져오기 오류:', err);
     res.status(500).json({ error: '채용공고 목록을 가져오는 중 오류가 발생했습니다.' });

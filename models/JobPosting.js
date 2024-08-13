@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
+const Company = require('./Company');
 
 const JobPosting = sequelize.define('JobPosting', {
   id: {
@@ -11,6 +12,10 @@ const JobPosting = sequelize.define('JobPosting', {
   company_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'companies',
+      key: 'id',
+    },
   },
   position: {
     type: DataTypes.STRING(255),
@@ -37,5 +42,7 @@ const JobPosting = sequelize.define('JobPosting', {
   tableName: 'job_postings',
   timestamps: false,
 });
+
+JobPosting.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 
 module.exports = JobPosting;
